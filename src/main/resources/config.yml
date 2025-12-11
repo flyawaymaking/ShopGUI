@@ -4,64 +4,74 @@
 currency: "coins"
 
 # Название GUI магазина (поддерживает цвета и форматирование)
-gui-title: "&6Магазин за коины"
+gui-title: "<gold>Магазин за коины"
+
+messages:
+  player-only: "<red>Эта команда только для игроков!"
+  no-permission: "<red>У вас нет прав для использования данной команды!"
+  reload-success: "<green>Конфигурация магазина перезагружена!"
+  item-not-found: "<red>Предмет не найден!"
+  item-create-fail: "<red>Ошибка создания предмета!"
+  currency-not-found: "<red>Ошибка: валюта не найдена! Обратитесь к администратору."
+  not-enough-money: "<red>Недостаточно средств! Нужно: <yellow>{price}."
+  purchase-success: "<green>Вы успешно купили <yellow>{item}</yellow> за <gold>{price}</gold>!"
 
 # Если не задана command, то игроку при покупке выдаётся предмет, иначе - выполняется команда
 shop-items:
   empty_spawner:
-    name: "§6Пустой спавнер"
+    name: "<gold>Пустой спавнер"
     material: SPAWNER
     slot: 10
     price: 2000
     lore:
-      - "§7Пустой спавнер для мобов"
-      - "§7Цена: §6%price% coins"
+      - "<gray>Пустой спавнер для мобов"
+      - "<gray>Цена: <gold>{price}"
       - ""
-      - "§eМожно настроить с помощью яиц призыва"
+      - "<yellow>Можно настроить с помощью яиц призыва"
 
   zombie_egg:
-    name: "§2Яйцо призыва зомби"
+    name: "<dark_green>Яйцо призыва зомби"
     material: ZOMBIE_SPAWN_EGG
     slot: 19
     price: 500
     lore:
-      - "§7Используйте на спавнере для настройки"
-      - "§7Цена: §6%price% coins"
+      - "<gray>Используйте на спавнере для настройки"
+      - "<gray>Цена: <gold>{price}"
 
   skeleton_egg:
-    name: "§fЯйцо призыва скелета"
+    name: "<white>Яйцо призыва скелета"
     material: SKELETON_SPAWN_EGG
     slot: 20
     price: 600
     lore:
-      - "§7Используйте на спавнере для настройки"
-      - "§7Цена: §6%price% coins"
+      - "<gray>Используйте на спавнере для настройки"
+      - "<gray>Цена: <gold>{price}"
 
   elytra_unbreaking3_mending1:
-    name: "§5Элитры"
+    name: "<dark_purple>Элитры"
     material: ELYTRA
     slot: 43
     price: 1000
     lore:
       - ""
-      - "§7Цена: §6%price%⛂"
+      - "<gray>Цена: <gold>{price}"
       - ""
-      - "§eЛКМ: §fчтобы купить"
+      - "<yellow>ЛКМ: <white>чтобы купить"
     enchantments:
       unbreaking: 3
       mending: 1
 
   cosmetic_key:
-    name: "§dКлюч от кейса с косметикой"
+    name: "<light_purple>Ключ от кейса с косметикой"
     material: PLAYER_HEAD
     texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTdhOTc3MmY3ODMxMmIxNDE1NmE0ZThiNjZhNTQ4YjE3MjViYTY5MWI4YjdhMDY2OGFmNjE2MWMyYjgzOGU5YiJ9fX0="
     slot: 37
     price: 150
     lore:
-      - "§7Получите ключ для открытия кейса"
-      - "§7с косметикой /uc"
+      - "<gray>Получите ключ для открытия кейса"
+      - "<gray>с косметикой /uc"
       - ""
-      - "§7Цена: §6%price%⛂"
+      - "<gray>Цена: <gold>{price}"
       - ""
-      - "§eЛКМ: §fчтобы купить"
+      - "<yellow>ЛКМ: <white>чтобы купить"
     command: "uc give key 1 %player%"

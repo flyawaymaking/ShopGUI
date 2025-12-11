@@ -1,5 +1,7 @@
 package com.flyaway.shopgui;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -10,28 +12,25 @@ import org.bukkit.inventory.ItemFlag;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
 public class ShopItem {
-
-    private String id;
-    private String name;
-    private Material material;
-    private int slot;
-    private double price;
-    private List<String> lore;
-    private String command;
-    private String texture;
-    private Map<Enchantment, Integer> enchantments;
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private final String id;
+    private final String name;
+    private final Material material;
+    private final int slot;
+    private final double price;
+    private final List<String> lore;
+    private final String command;
+    private final String texture;
+    private final Map<Enchantment, Integer> enchantments;
 
     public ShopItem(String id, String name, Material material, int slot, double price,
-                   List<String> lore, String command, String texture, Map<Enchantment, Integer> enchantments) {
+                    List<String> lore, String command, String texture, Map<Enchantment, Integer> enchantments) {
         this.id = id;
         this.name = name;
         this.material = material;
@@ -44,12 +43,10 @@ public class ShopItem {
     }
 
     public ItemStack createItemStack() {
-        // Для голов используем специальный метод
         if (material == Material.PLAYER_HEAD && texture != null && !texture.isEmpty()) {
             return createSkullWithTexture();
         }
 
-        // Для обычных предметов
         return createNormalItem();
     }
 
@@ -72,7 +69,6 @@ public class ShopItem {
         if (meta != null) {
             applyCommonItemProperties(meta);
 
-            // Только установка текстуры для головы
             try {
                 PlayerProfile profile = Bukkit.createProfile(java.util.UUID.randomUUID(), "CustomHead");
                 ProfileProperty textureProperty = new ProfileProperty("textures", texture);
@@ -89,19 +85,16 @@ public class ShopItem {
     }
 
     private void applyCommonItemProperties(ItemMeta meta) {
-        // Установка имени
-        Component displayName = LegacyComponentSerializer.legacySection().deserialize(name);
+        Component displayName = miniMessage.deserialize(name);
         meta.displayName(displayName);
 
-        // Установка лора
         List<Component> loreComponents = new ArrayList<>();
         for (String line : lore) {
-            Component loreLine = LegacyComponentSerializer.legacySection().deserialize(line);
+            Component loreLine = miniMessage.deserialize(line);
             loreComponents.add(loreLine);
         }
         meta.lore(loreComponents);
 
-        // Добавление зачарований (только для не-голов или если действительно нужны)
         if (!enchantments.isEmpty() && material != Material.PLAYER_HEAD) {
             for (Map.Entry<Enchantment, Integer> enchant : enchantments.entrySet()) {
                 meta.addEnchant(enchant.getKey(), enchant.getValue(), true);
@@ -110,14 +103,39 @@ public class ShopItem {
         }
     }
 
-    // Геттеры
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public Material getMaterial() { return material; }
-    public int getSlot() { return slot; }
-    public double getPrice() { return price; }
-    public List<String> getLore() { return lore; }
-    public String getCommand() { return command; }
-    public String getTexture() { return texture; }
-    public Map<Enchantment, Integer> getEnchantments() { return enchantments; }
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public int getSlot() {
+        return slot;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public List<String> getLore() {
+        return lore;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public String getTexture() {
+        return texture;
+    }
+
+    public Map<Enchantment, Integer> getEnchantments() {
+        return enchantments;
+    }
 }

@@ -1,5 +1,5 @@
 name: ShopGUI
-version: 1.1.0
+version: 1.2.0
 main: com.flyaway.shopgui.ShopPlugin
 api-version: 1.21
 description: GUI магазин для предметов

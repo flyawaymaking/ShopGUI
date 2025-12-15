@@ -54,7 +54,7 @@ public class ShopManager {
 
     private String formatPrice(double amount) {
         if (this.currency != null) {
-            return currency.formatValue(amount);
+            return currency.format(amount);
         }
         return String.format("%.0f", amount);
     }

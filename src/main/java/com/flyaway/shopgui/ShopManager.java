@@ -167,7 +167,7 @@ public class ShopManager {
 
         for (ShopItem shopItem : shopItems.values()) {
             if (shopItem.getSlot() >= 0 && shopItem.getSlot() < 54) {
-                gui.setItem(shopItem.getSlot(), shopItem.createItemStack());
+                gui.setItem(shopItem.getSlot(), shopItem.createItemStack(player));
             }
         }
 
@@ -200,11 +200,9 @@ public class ShopManager {
 
         String command = shopItem.getCommand();
         if (command != null && !command.trim().isEmpty()) {
-            // Способ 1: Выдача через команду
             String formattedCommand = command.replace("%player%", player.getName());
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand);
         } else {
-            // Способ 2: Автоматическое создание предмета
             ItemStack item = createSimpleItemFromShopItem(shopItem);
             if (item != null) {
                 giveItemToPlayer(player, item);

@@ -1,11 +1,13 @@
-name: ShopGUI
-version: 1.2.1
-main: com.flyaway.shopgui.ShopPlugin
+name: ${name}
+main: ${group}.ShopPlugin
+version: ${version}
 api-version: 1.21
 description: GUI магазин для предметов
-depend: [CoinsEngine]
 author: FlyAwayMaking
 website: https://github.com/flyawaymaking
+depend: [CoinsEngine]
+softdepend:
+  - PlaceholderAPI
 
 commands:
   dshop:

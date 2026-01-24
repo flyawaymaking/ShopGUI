@@ -29,6 +29,7 @@ public class ShopCommand implements CommandExecutor {
 
             plugin.getConfigManager().reloadConfig();
             plugin.getShopManager().reloadShop();
+            ShopItem.setHooks();
             plugin.sendMessage(sender, configManager.getMessage("reload-success"));
             return true;
         }

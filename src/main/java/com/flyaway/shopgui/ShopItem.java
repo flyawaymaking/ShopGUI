@@ -1,9 +1,11 @@
 package com.flyaway.shopgui;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -12,12 +14,10 @@ import org.bukkit.inventory.ItemFlag;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public class ShopItem {
+    private static boolean hasPapi = false;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final String id;
     private final String name;
@@ -42,41 +42,43 @@ public class ShopItem {
         this.enchantments = enchantments != null ? enchantments : new HashMap<>();
     }
 
-    public ItemStack createItemStack() {
-        if (material == Material.PLAYER_HEAD && texture != null && !texture.isEmpty()) {
-            return createSkullWithTexture();
-        }
-
-        return createNormalItem();
+    public static void setHooks() {
+        hasPapi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
     }
 
-    private ItemStack createNormalItem() {
+    public ItemStack createItemStack(Player player) {
+        if (material == Material.PLAYER_HEAD && texture != null && !texture.isEmpty()) {
+            return createSkullWithTexture(player);
+        }
+
+        return createNormalItem(player);
+    }
+
+    private ItemStack createNormalItem(Player player) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
-            applyCommonItemProperties(meta);
+            applyCommonItemProperties(meta, player);
             item.setItemMeta(meta);
         }
 
         return item;
     }
 
-    private ItemStack createSkullWithTexture() {
+    private ItemStack createSkullWithTexture(Player player) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
 
         if (meta != null) {
-            applyCommonItemProperties(meta);
+            applyCommonItemProperties(meta, player);
 
             try {
-                PlayerProfile profile = Bukkit.createProfile(java.util.UUID.randomUUID(), "CustomHead");
-                ProfileProperty textureProperty = new ProfileProperty("textures", texture);
-                profile.setProperty(textureProperty);
+                PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "CustomHead");
+                profile.setProperty(new ProfileProperty("textures", texture));
                 meta.setPlayerProfile(profile);
-            } catch (Exception e) {
-                // Если не получилось установить текстуру, просто оставляем обычную голову
-            }
+            } catch (Exception ignored) {
+            }  // Если не получилось установить текстуру, просто оставляем обычную голову
 
             skull.setItemMeta(meta);
         }
@@ -84,14 +86,14 @@ public class ShopItem {
         return skull;
     }
 
-    private void applyCommonItemProperties(ItemMeta meta) {
-        Component displayName = miniMessage.deserialize(name);
-        meta.displayName(displayName);
+    private void applyCommonItemProperties(ItemMeta meta, Player player) {
+        String processedName = applyPlaceholders(name, player);
+        meta.displayName(miniMessage.deserialize(processedName));
 
         List<Component> loreComponents = new ArrayList<>();
         for (String line : lore) {
-            Component loreLine = miniMessage.deserialize(line);
-            loreComponents.add(loreLine);
+            String processedLine = applyPlaceholders(line, player);
+            loreComponents.add(miniMessage.deserialize(processedLine));
         }
         meta.lore(loreComponents);
 
@@ -102,6 +104,15 @@ public class ShopItem {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         }
     }
+
+    private String applyPlaceholders(String input, Player player) {
+        if (player == null || !hasPapi) {
+            return input;
+        }
+
+        return PlaceholderAPI.setPlaceholders(player, input);
+    }
+
 
     public String getId() {
         return id;

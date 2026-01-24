@@ -6,19 +6,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ShopPlugin extends JavaPlugin {
 
-    private static ShopPlugin instance;
     private ShopManager shopManager;
     private ConfigManager configManager;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     @Override
     public void onEnable() {
-        instance = this;
 
         saveDefaultConfig();
 
         this.configManager = new ConfigManager(this);
         this.shopManager = new ShopManager(this);
+        ShopItem.setHooks();
 
         getCommand("dshop").setExecutor(new ShopCommand(this));
 
@@ -30,10 +29,6 @@ public class ShopPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("ShopPlugin выключен!");
-    }
-
-    public static ShopPlugin getInstance() {
-        return instance;
     }
 
     public ShopManager getShopManager() {
